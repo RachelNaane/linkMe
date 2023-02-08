@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 import json
 import database as db
+from bson import json_util
 
 views =  Blueprint('views', __name__)
 
@@ -17,8 +18,12 @@ def home():
             db.add_note(user_id=current_user.id, text=note)
             flash("note added successfully", category='success')
 
-    user_notes = db.get_user_notes(current_user.id)
-    return render_template("home.html", user=current_user, notes = user_notes)
+    return render_template("home.html", user=current_user)
+
+@views.route('/get-notes', methods= ['GET'])
+def get_notes():
+    notes = db.get_user_notes(current_user.id)
+    return json.dumps(list(notes),default=json_util.default)
 
 @views.route('/delete-note', methods= ['POST'])
 def delete_note():

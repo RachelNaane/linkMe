@@ -10,6 +10,7 @@ db = client.data
 users = db.users
 notes = db.notes
 
+## duocument templates: ##
 # user = {
 #     "name": "rachel",
 #     "email": "ratash3@gamil.com",
@@ -21,7 +22,7 @@ notes = db.notes
 #     "user_id": "768790531br456"
 # }
 
-#users functions
+#users collection functions
 def add_user(user):
     return users.insert_one(user).inserted_id
 
@@ -39,7 +40,7 @@ def get_user_by_id(id):
     _id = ObjectId(id)
     return users.find_one({"_id": _id})
 
-#notes functions
+#notes collection functions
 def add_note(user_id, text):
     from bson.objectid import ObjectId
     _id = ObjectId(user_id)

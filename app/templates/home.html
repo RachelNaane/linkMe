@@ -3,17 +3,7 @@
     <!--show users notes-->
     <h1 align="center">My Notes App</h1>
     <ul class="list-group list-group-flush" id="notes">
-      {% for note in notes %}
-      <li class="list-group-item">
-        <input type="text" id="{{ note['_id'] }}" value="{{ note['text'] }}" class="border-0">
-        <button type="button" id ="delete_note" class="close" data-id="{{ note['_id'] }}">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <button type="button" id ="edit_note" class="close" data-id="{{ note['_id'] }}">
-          <span aria-hidden="true">&#9998;</span>
-        </button>
-      </li>
-      {% endfor %}
+     <!--javascript will load content to here-->
     </ul>
     <!--add note-->
     <form method="POST">
@@ -24,33 +14,4 @@
       </div>
     </form>
     <div class="container">{% block model %} {% endblock %}</div>
-{% endblock %}
-{% block javascript %}
-    <script>
-      //delete note
-      document.querySelectorAll("#delete_note").forEach(function(n) {
-        n.addEventListener("click", function() {
-          var id = this.getAttribute("data-id");
-          fetch("/delete-note", {
-            method: "POST",
-            body: JSON.stringify({ "noteId": id }),
-          }).then((_res) => {
-            window.location.href = "/";
-          });
-        });
-      });
-      //send notes id to editor
-      document.querySelectorAll('#edit_note').forEach(function(e) {
-        e.addEventListener("click", function(){
-          var id = this.getAttribute("data-id");
-          var new_note = document.getElementById(id).value;
-          fetch("/edit_note", {
-            method: "PUT",
-            body: JSON.stringify({ "noteId": id, "newNote": new_note }),
-          }).then((_res) => {
-            window.location.href = "/";
-          });
-        });
-      });
-    </script>
 {% endblock %}
