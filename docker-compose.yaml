@@ -1,0 +1,58 @@
+services:
+  # proxy:
+  #   image: nginx:1.23.3
+  #   ports:
+  #     - "80:80"
+  #   volumes: 
+  #     - ./nginx/my.conf:/etc/nginx/conf.d/default.conf
+  #     - ./app/project/static:/usr/share/nginx/html/static
+  #   networks:
+  #     - frontend
+  #   depends_on:
+  #     app:
+  #       condition: service_healthy
+      
+  app:
+    build: .
+    expose: 
+      - "3000"
+    networks:
+      - frontend
+      - backend
+    environment:
+      - DB_URI="mongodb://db:27017"
+    restart: always
+    healthcheck:
+      test: "curl -f localhost:8000"
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    depends_on: 
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:14
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: "gutendex"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "gutendex"
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "gutendex"]
+      timeout: 5s
+      retries: 50
+      start_period: 10s
+
+volumes:
+  data:
+
+networks:
+  frontend:
+  backend:
