@@ -10,6 +10,18 @@ db = client.data
 users = db.users
 notes = db.notes
 
+# Check if the connection was successful by accessing the database.
+connected = False
+try:
+    test = MongoClient(connection_string, serverSelectionTimeoutMS=3000)
+    test.server_info()
+    connected = True
+except:
+    connected = False
+
+def is_connected():
+    return connected
+
 ## duocument templates: ##
 # user = {
 #     "name": "rachel",

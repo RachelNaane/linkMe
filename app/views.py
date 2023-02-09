@@ -17,10 +17,11 @@ def home():
         else:
             db.add_note(user_id=current_user.id, text=note)
             flash("note added successfully", category='success')
-
+    
+    if not db.is_connected():
+        return render_template("nodb.html", user=current_user)
     return render_template("home.html", user=current_user)
 
-@login_required
 @views.route('/get-notes', methods= ['GET'])
 def get_notes():
     notes = db.get_user_notes(current_user.id)

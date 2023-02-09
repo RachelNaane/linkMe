@@ -1,5 +1,7 @@
 FROM python:alpine3.17
 
+RUN apk add curl
+
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt

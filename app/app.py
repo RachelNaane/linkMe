@@ -21,6 +21,9 @@ import user
 
 @login_manager.user_loader
 def load_user(id):
+    if not db.is_connected():
+        return None
+
     u = db.get_user_by_id(id)
     if not u:
         return None
