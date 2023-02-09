@@ -14,44 +14,38 @@ services:
       
   app:
     build: .
-    expose: 
-      - "3000"
+    ports: 
+      - 3000:3000
     networks:
       - frontend
       - backend
     environment:
-      - DB_URI="mongodb://db:27017"
-    restart: always
-    healthcheck:
-      test: "curl -f localhost:8000"
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 30s
+      DB_URI: "mongodb://db:27017"
+    # healthcheck:
+    #   test: "curl -f localhost:3000"
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 20
+    #   start_period: 30s
     depends_on: 
       db:
         condition: service_healthy
 
   db:
-    image: postgres:14
+    image: mongo:6.0.4
     expose:
-      - "5432"
+      - "27017"
     environment:
-      POSTGRES_USER: "gutendex"
-      POSTGRES_PASSWORD: "password"
-      POSTGRES_DB: "gutendex"
+      MONGO_INITDB_DATABASE: data
     volumes:
-      - data:/var/lib/postgresql/data
+      - ./mongo:/docker-entrypoint-initdb.d
     networks:
       - backend
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "gutendex"]
-      timeout: 5s
-      retries: 50
+      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      retries: 10
       start_period: 10s
-
-volumes:
-  data:
 
 networks:
   frontend:

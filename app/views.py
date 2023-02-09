@@ -20,6 +20,7 @@ def home():
 
     return render_template("home.html", user=current_user)
 
+@login_required
 @views.route('/get-notes', methods= ['GET'])
 def get_notes():
     notes = db.get_user_notes(current_user.id)
