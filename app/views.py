@@ -41,3 +41,7 @@ def edit_note():
     new_note = data['newNote']
     db.edit_note(noteId, new_note)
     return jsonify({})
+
+@views.route('/health')
+def is_healthy():
+    return 'OK', 200
