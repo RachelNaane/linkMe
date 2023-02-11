@@ -1,10 +1,10 @@
 services:
   nginx:
-    image: nginx:stable-alpine-perl
+    build: ./nginx
     ports:
       - "80:80"
-    volumes: 
-      - $PWD/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    # volumes: 
+    #   - $PWD/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - frontend
     depends_on:
