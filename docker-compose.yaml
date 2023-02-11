@@ -4,7 +4,7 @@ services:
     ports:
       - "80:80"
     volumes: 
-      - $PWD/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - $PWD/nginx:/etc/nginx/conf.d
     networks:
       - frontend
     depends_on:
