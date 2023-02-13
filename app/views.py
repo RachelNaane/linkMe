@@ -47,3 +47,21 @@ def edit_note():
 @views.route('/health')
 def is_healthy():
     return 'OK', 200
+
+@views.route("/test")
+def test():
+    try:
+        mongo_hostname = os.environ.get('MONGO_HOSTNAME')
+        mongo_user = os.environ.get('MONGO_USER')
+        mongo_password = os.environ.get('MONGO_PASSWORD')
+
+        client = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password)
+        db = client.data
+        test = db.test
+        test.insert_one({ "test": "this is a test" })
+        res = test.find()
+        for r in res:
+            re = r
+        return f"{re}"
+    except:
+        return f"{mongo_hostname}-{mongo_user}-{mongo_password}"
