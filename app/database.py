@@ -2,10 +2,11 @@ from dotenv import load_dotenv, find_dotenv
 import os
 from pymongo import MongoClient
 
-load_dotenv(find_dotenv())
-connection_string = os.environ.get('DB_URI')
+mongo_hostname = os.environ.get('MONGO_HOSTNAME')
+mongo_user = os.environ.get('MONGO_USER')
+mongo_password = os.environ.get('MONGO_PASSWORD')
 
-client = MongoClient(connection_string)
+client = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password)
 db = client.data
 users = db.users
 notes = db.notes
@@ -13,7 +14,7 @@ notes = db.notes
 # Check if the connection was successful by accessing the database.
 connected = False
 try:
-    test = MongoClient(connection_string, serverSelectionTimeoutMS=3000)
+    test = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password, serverSelectionTimeoutMS=3000)
     test.server_info()
     connected = True
 except:

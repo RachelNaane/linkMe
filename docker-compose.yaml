@@ -19,7 +19,9 @@ services:
       - frontend
       - backend
     environment:
-      DB_URI: "mongodb://db:27017"
+      MONGO_HOSTNAME: "db"
+      MONGO_USER: ""
+      MONGO_PASSWORD: ""
     healthcheck:
       test: "curl -f localhost:3000"
       interval: 5s

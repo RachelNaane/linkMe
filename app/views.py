@@ -3,6 +3,8 @@ from flask_login import login_required, current_user
 import json
 import database as db
 from bson import json_util
+from pymongo import MongoClient
+import os
 
 views =  Blueprint('views', __name__)
 
