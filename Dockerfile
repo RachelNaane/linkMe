@@ -8,7 +8,7 @@ RUN pip install -r requirements.txt
 
 COPY ./app/ ./
 EXPOSE 3000
-ENV MONGO_HOSTNAME ""
+ENV MONGO_HOSTNAME "mongo"
 ENV MONGO_USER ""
 ENV MONGO_PASSWORD ""
 
