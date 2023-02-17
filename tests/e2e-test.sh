@@ -33,7 +33,7 @@ fi
 echo ""
 echo "TEST 3 - GET LINK ==============================================="
 echo "starting test..."
-response=$(curl -s -o /dev/null -w "%{http_code}" $url/get-links)
+response=$(curl $url/get-links)
 echo "got response ${response}"
 count=$(grep -o "test" <<< "$response" | wc -l)
 echo "found 'test' ${count} times"
