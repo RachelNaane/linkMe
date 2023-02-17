@@ -1,67 +1,80 @@
-from flask import Blueprint, render_template, request, flash, jsonify
-from flask_login import login_required, current_user
+from flask import Blueprint, render_template, request, flash, redirect
 import json
 import database as db
 from bson import json_util
-from pymongo import MongoClient
-import os
 
 views =  Blueprint('views', __name__)
 
 @views.route('/', methods= ['GET', 'POST'])
-@login_required
 def home():
     if request.method == 'POST':
-        note = request.form.get('note')
+        url = request.form.get('url')
+        tag = request.form.get('tag')
+        description = request.form.get('description')
 
-        if len(note) < 1:
-            flash("note can't be blank", category='error')
+        if len(url) < 1:
+            flash("link can't be blank", category='error')
+        elif len(tag) < 1:
+            flash("name can't be blank", category='error')
+        elif len(description) < 1:
+            flash("description can't be blank", category='error')
         else:
-            db.add_note(user_id=current_user.id, text=note)
-            flash("note added successfully", category='success')
+            success = db.add_link(url,tag,description)
+            if success:
+                flash("link added successfully", category='success')
+            else:
+                flash("sorry...could not add link, try again later", category='error')
+    return render_template("home.html")
+
+@views.route('/get-links', methods= ['GET'])
+def get_links():
+    links = db.get_links()
+    return json.dumps(list(links),default=json_util.default)
+
+@views.route('/delete-link/<id>')
+def delete_link(id):
+    db.delete_link(id)
+    return redirect("/")
+
+@views.route('/edit-link/<id>', methods = ['POST', 'GET'])
+def edit_link(id):
+    if request.method == 'POST':
+        id = request.form.get('id')
+        new_url = request.form.get('url')
+        new_tag = request.form.get('tag')
+        new_description = request.form.get('description')
+        
+        if len(new_url) < 1:
+            flash("link can't be blank", category='error')
+        elif len(new_tag) < 1:
+            flash("name can't be blank", category='error')
+        elif len(new_description) < 1:
+            flash("description can't be blank", category='error')
+        else:
+            db.edit_link(id, new_url, new_tag, new_description)
+            return render_template("home.html")
+
+    link=db.get_link_by_id(id)
+    return render_template("editor.html", link=link, id=id)
     
-    if not db.is_connected():
-        return render_template("nodb.html", user=current_user)
-    return render_template("home.html", user=current_user)
-
-@views.route('/get-notes', methods= ['GET'])
-def get_notes():
-    notes = db.get_user_notes(current_user.id)
-    return json.dumps(list(notes),default=json_util.default)
-
-@views.route('/delete-note', methods= ['POST'])
-def delete_note():
-    data = json.loads(request.data)
-    noteId = data['noteId']
-    db.delete_note(noteId)
-    return jsonify({})
-
-@views.route('/edit_note', methods = ['PUT'])
-def edit_note():
-    data = json.loads(request.data)
-    noteId = data['noteId']
-    new_note = data['newNote']
-    db.edit_note(noteId, new_note)
-    return jsonify({})
-
 @views.route('/health')
 def is_healthy():
     return 'OK', 200
 
-@views.route("/test")
-def test():
-    try:
-        mongo_hostname = os.environ.get('MONGO_HOSTNAME')
-        mongo_user = os.environ.get('MONGO_USER')
-        mongo_password = os.environ.get('MONGO_PASSWORD')
+# @views.route("/test")
+# def test():
+#     try:
+#         mongo_hostname = os.environ.get('MONGO_HOSTNAME')
+#         mongo_user = os.environ.get('MONGO_USER')
+#         mongo_password = os.environ.get('MONGO_PASSWORD')
 
-        client = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password)
-        db = client.data
-        test = db.test
-        test.insert_one({ "test": "this is a test" })
-        res = test.find()
-        for r in res:
-            re = r
-        return f"{re}"
-    except:
-        return f"{mongo_hostname}-{mongo_user}-{mongo_password}"
+#         client = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password)
+#         db = client.data
+#         test = db.test
+#         test.insert_one({ "test": "this is a test" })
+#         res = test.find()
+#         for r in res:
+#             re = r
+#         return f"{re}"
+#     except:
+#         return f"{mongo_hostname}-{mongo_user}-{mongo_password}"

@@ -1,6 +1,7 @@
 FROM python:alpine3.17
 
 RUN apk add curl
+RUN pip install --upgrade pip
 
 WORKDIR /app
 COPY requirements.txt .

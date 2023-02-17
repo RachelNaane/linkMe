@@ -1,80 +1,58 @@
-from dotenv import load_dotenv, find_dotenv
 import os
 from pymongo import MongoClient
+from flask import current_app as app
 
 mongo_hostname = os.environ.get('MONGO_HOSTNAME')
 mongo_user = os.environ.get('MONGO_USER')
 mongo_password = os.environ.get('MONGO_PASSWORD')
 
-client = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password)
-db = client.data
-users = db.users
-notes = db.notes
+connected=False
 
-# Check if the connection was successful by accessing the database.
-connected = False
 try:
-    test = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password, serverSelectionTimeoutMS=3000)
-    test.server_info()
-    connected = True
+    client = MongoClient(mongo_hostname,27017,username=mongo_user, password=mongo_password, serverSelectionTimeoutMS=3000)
+    db = client.data
+    links = db.links    
+    connected=True
 except:
-    connected = False
+    app.logger.critical('no database connection!!')
+    connected=False
 
-def is_connected():
-    return connected
-
-## duocument templates: ##
-# user = {
-#     "name": "rachel",
-#     "email": "ratash3@gamil.com",
-#     "password": "123456"
+## template
+# link = {
+#     "url": "https://www.google.com/",
+#     "tag": "google",
+#     "description": "a link to google search"
 # }
 
-# note = {
-#     "text": "my first note",
-#     "user_id": "768790531br456"
-# }
+def add_link(url, tag, description):
+    if connected:
+        links.insert_one({"url": url,"tag": tag, "description": description})
+        app.logger.info('link added')
+        return True
+    return False
 
-#users collection functions
-def add_user(user):
-    return users.insert_one(user).inserted_id
+def delete_link(id):
+    if connected:
+        from bson.objectid import ObjectId
+        _id = ObjectId(id)
+        links.delete_one({"_id": _id})
+        return True
+    return False
 
-def get_user(email, password):
-    return users.find_one({"email": email, "password": password})
+def get_links():
+    if connected:
+        return links.find({})
+    
+def get_link_by_id(id):
+    if connected:
+        from bson.objectid import ObjectId
+        _id = ObjectId(id)
+        return links.find_one({"_id": _id})
 
-def get_all_users():
-    return users.find()
-
-def get_user_by_mail(email):
-    return users.find_one({"email": email})
-
-def get_user_by_id(id):
-    from bson.objectid import ObjectId
-    _id = ObjectId(id)
-    return users.find_one({"_id": _id})
-
-#notes collection functions
-def add_note(user_id, text):
-    from bson.objectid import ObjectId
-    _id = ObjectId(user_id)
-    notes.insert_one({"text": text, "user_id": _id})
-
-def get_user_notes(user_id):
-    from bson.objectid import ObjectId
-    _id = ObjectId(user_id)
-    return notes.find({"user_id": _id})
-
-def get_note_by_id(id):
-    from bson.objectid import ObjectId
-    _id = ObjectId(id)
-    return notes.find_one({"_id": _id})
-
-def delete_note(id):
-    from bson.objectid import ObjectId
-    _id = ObjectId(id)
-    notes.delete_one({"_id": _id})
-
-def edit_note(id, new_text):
-    from bson.objectid import ObjectId
-    _id = ObjectId(id)
-    notes.update_one({"_id": _id}, {"$set": {"text": new_text}})
+def edit_link(id, new_url, new_tag, new_description):
+    if connected:
+        from bson.objectid import ObjectId
+        _id = ObjectId(id)
+        links.update_one({"_id": _id}, {"$set": {"url": new_url, "tag": new_tag, "description": new_description}})
+        return True
+    return False

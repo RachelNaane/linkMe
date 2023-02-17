@@ -1,11 +1,26 @@
-
-<div class="model" id="editor" role="dialog" aria-lableledby="editorLable" aria-hidden="true">
-    <form method="PUT">
-        <textarea name="note" id="note" class="form-control"></textarea>
-        <br />
-        <div align="center">
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-          <button type="button" class="btn btn-primary">Exit</button>
+{% extends "base.html" %} {% block title %}editor{% endblock %} 
+{% block content%}
+  <br/>
+    <div class="card" style="max-width: 18rem;">
+      <div class="card-body">
+      <form method="POST">
+        <div class="form-group">
+          <br><h1>Edit Link</h1><br>
+          <input type="hidden" id="id" name="id" value="{{ id }}" />
+          <label for="url">link</label>
+          <input type="text" class="form-control" id="url" name="url" value="{{ link.url }}">
         </div>
-    </form>
-</div>
+        <div class="form-group">
+          <label for="tag">name</label>
+          <input type="text" class="form-control" id="tag" name="tag" value="{{ link.tag }}">
+        </div>
+        <div class="form-group">
+          <label for="description">description</label>
+          <input type="text" class="form-control" id="description" name="description" value="{{ link.description }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="/" class="btn btn-primary">Exit</a>
+      </form>
+      </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,6 @@
-//get notes
+//get links
 window.onload = function () {
-    fetch("/get-notes").then((res) => {
+    fetch("/get-links").then((res) => {
       if (res.ok) {
         return res.json();
       } else {
@@ -8,54 +8,52 @@ window.onload = function () {
       }
     })
     .then(data => {
-      displayNotes(data)
+      displayLinks(data)
     })
     .catch((error) => console.error("FETCH ERROR:", error)
     );
 };
-  //display notes
-function displayNotes(notes) {
-  notes.forEach(note => {
-    const li = `<li class="list-group-item">
-      <input type="text" id="${(note._id)['$oid']}" value="${note.text}" class="border-0">
-      <button type="button" id ="delete_note" class="close" data-id="${(note._id)['$oid']}">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <button type="button" id ="edit_note" class="close" data-id="${(note._id)['$oid']}">
-        <span aria-hidden="true">&#9998;</span>
-      </button>
-      </li>`
-    document.getElementById("notes").insertAdjacentHTML('beforeend', li)
-  });
-  addDeleteFunctionality();
-  addEditFunctionality();
-};
-//delete note
-function addDeleteFunctionality () {
-  document.querySelectorAll("#delete_note").forEach(function(n) {
-    n.addEventListener("click", function() {
-      var id = this.getAttribute("data-id");
-      fetch("/delete-note", {
-        method: "POST",
-        body: JSON.stringify({ "noteId": id }),
-      }).then((_res) => {
-        window.location.href = "/";
-      });
-    });
+  //display links
+function displayLinks(links) {
+  links.forEach(link => {
+    const card = `<div class="card" border-light mb-3" style="max-width: 18rem;">
+    <div class="card-header">${(link.tag)}</div>
+      <div class="card-body">
+        <p class="card-text">${(link.description)}</p>
+        <a href='${(link.url)}' rel="noopener noreferrer" target="_blank" class="btn btn-primary">Link Me!</a>
+        <a href="/delete-link/${(link._id)['$oid']}" class="btn btn-primary">delete</a>
+        <a href="/edit-link/${(link._id)['$oid']}" class="btn btn-primary">edit</a>
+      </div>
+    </div>`
+    document.getElementById("links-list").insertAdjacentHTML('beforeend', card)
   });
 };
-//edit note
-function addEditFunctionality () {
-  document.querySelectorAll('#edit_note').forEach(function(e) {
-    e.addEventListener("click", function(){
-      var id = this.getAttribute("data-id");
-      var new_note = document.getElementById(id).value;
-      fetch("/edit_note", {
-        method: "PUT",
-        body: JSON.stringify({ "noteId": id, "newNote": new_note }),
-      }).then((_res) => {
-        window.location.href = "/";
-      });
-    });
-  });
-};
+// //delete note
+// function addDeleteFunctionality () {
+//   document.querySelectorAll("#delete_note").forEach(function(n) {
+//     n.addEventListener("click", function() {
+//       var id = this.getAttribute("data-id");
+//       fetch("/delete-note", {
+//         method: "POST",
+//         body: JSON.stringify({ "noteId": id }),
+//       }).then((_res) => {
+//         window.location.href = "/";
+//       });
+//     });
+//   });
+// };
+// //edit note
+// function addEditFunctionality () {
+//   document.querySelectorAll('#edit_note').forEach(function(e) {
+//     e.addEventListener("click", function(){
+//       var id = this.getAttribute("data-id");
+//       var new_note = document.getElementById(id).value;
+//       fetch("/edit_note", {
+//         method: "PUT",
+//         body: JSON.stringify({ "noteId": id, "newNote": new_note }),
+//       }).then((_res) => {
+//         window.location.href = "/";
+//       });
+//     });
+//   });
+// };
