@@ -21,7 +21,7 @@ function displayLinks(links) {
       <div class="card-body">
         <p class="card-text">${(link.description)}</p>
         <a href='${(link.url)}' rel="noopener noreferrer" target="_blank" class="btn btn-primary">Link Me!</a>
-        <a href="/delete-link/${(link._id)['$oid']}" class="btn btn-primary">delete</a>
+        <a href="/delete-link/${(link._id)['$oid']}" class="btn btn-primary">delete1</a>
         <a href="/edit-link/${(link._id)['$oid']}" class="btn btn-primary">edit</a>
       </div>
     </div>`
