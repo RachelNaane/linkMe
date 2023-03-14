@@ -28,3 +28,15 @@ The value of the variable need to be the name of the docker image build from the
 You can set the value in 2 ways:
 *  Run ```export APP_IMAGE=linkme ``` before running ```docker-compose up -d```
 *  Create a .env file, and set the variable and the value - ```APP_IMAGE=linkme```
+
+# Note
+
+This project is part of my devops portfolio project.
+In my project I created this awesome app, and built a full ci/cd for it.
+So yes, this is why this app maybe isn't as awesome as I would have liked. I am not a programmer, I'm devops! So judge me by my devops skills and not bootstrap...
+
+The full project consists of 4 github repositories:
+* The app source code - you are here:)
+* The Jenkinsfile repo - https://github.com/RachelNaane/linkMe-jenkins
+* The infrastructure source code - https://github.com/RachelNaane/linkMe-terraform
+* The kubernetes source code - https://github.com/RachelNaane/linkMe-gitops
