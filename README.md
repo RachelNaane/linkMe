@@ -1,15 +1,16 @@
 # DevOps Portfolio
 
-This is my devops portfolio!
-The goal of this project is to demonstrate all the methodologies and methodologies I learned as a devops engineer.
+This is part of my devops portfolio!
+
+The goal of this project is to demonstrate all the Technologies and methodologies I learned as a devops engineer.
 
 Tools & Technologies:
 * App: python flask, HTML, Bootstrap, Javascript.
 * Database: Mongodb
 * CI/CD: Jenkins, Kubernetes, Argocd, Helm
-* Infrastructure: Terraform
+* Infrastructure: Terraform & AWS
 * Logging: EFK stack
-* Monitoring: prometheus & grafana
+* Monitoring: Prometheus & Grafana
 
 The full project consists of 4 github repositories:
 * The app source code - you are here:)
