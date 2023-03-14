@@ -1,10 +1,33 @@
+# DevOps Portfolio
 
-# LinkMe
+This is my devops portfolio!
+The goal of this project is to demonstrate all the methodologies and methodologies I learned as a devops engineer.
+
+Tools & Technologies:
+* App: python flask, HTML, Bootstrap, Javascript.
+* Database: Mongodb
+* CI/CD: Jenkins, Kubernetes, Argocd, Helm
+* Infrastructure: Terraform
+* Logging: EFK stack
+* Monitoring: prometheus & grafana
+
+The full project consists of 4 github repositories:
+* The app source code - you are here:)
+* The Jenkinsfile repo - https://github.com/RachelNaane/linkMe-jenkins
+* The infrastructure source code - https://github.com/RachelNaane/linkMe-terraform
+* The kubernetes source code - https://github.com/RachelNaane/linkMe-gitops
+
+## Architecture
+
+To see the full architecture of the whole project - https://miro.com/app/board/uXjVPpJXqes=/?share_link_id=803191704280
+
+## LinkMe
 
 LinkMe is an app for storing links for future use.
 In linkMe you can store links easily, and access them quickly without ever losing them. 
 
 LinkMe is a flask app, and it uses mongodb in order to store and retrieve data, and nginx as a web server.
+
 ## Deployment
 
 To deploy this project run
@@ -28,15 +51,3 @@ The value of the variable need to be the name of the docker image build from the
 You can set the value in 2 ways:
 *  Run ```export APP_IMAGE=linkme ``` before running ```docker-compose up -d```
 *  Create a .env file, and set the variable and the value - ```APP_IMAGE=linkme```
-
-# Note
-
-This project is part of my devops portfolio project.
-In my project I created this awesome app, and built a full ci/cd for it.
-So yes, this is why this app maybe isn't as awesome as I would have liked. I am not a programmer, I'm devops! So judge me by my devops skills and not bootstrap...
-
-The full project consists of 4 github repositories:
-* The app source code - you are here:)
-* The Jenkinsfile repo - https://github.com/RachelNaane/linkMe-jenkins
-* The infrastructure source code - https://github.com/RachelNaane/linkMe-terraform
-* The kubernetes source code - https://github.com/RachelNaane/linkMe-gitops
