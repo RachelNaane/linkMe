@@ -31,8 +31,10 @@ jobs:
         tag_prefix: ""
         version_format: "${major}.${minor}.${patch}"
         
-    - name: Publish 
+    - name: Tag 
       run: |
         echo ${{ steps.Git_Semantic_Version.outputs.version_tag }}
+        git tag -a ${{ steps.Git_Semantic_Version.outputs.version_tag }} -m "new release - version ${{ steps.Git_Semantic_Version.outputs.version_tag }}"
+        git push origin ${{ steps.Git_Semantic_Version.outputs.version_tag }}
    
 
