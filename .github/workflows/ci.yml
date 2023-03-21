@@ -33,8 +33,7 @@ jobs:
         
     - name: Tag 
       run: |
-        echo ${{ steps.Git_Semantic_Version.outputs.version_tag }}
-        git tag -a ${{ steps.Git_Semantic_Version.outputs.version_tag }} -m "new release - version ${{ steps.Git_Semantic_Version.outputs.version_tag }}"
-        git push origin ${{ steps.Git_Semantic_Version.outputs.version_tag }}
+        git tag -a 1.0.22 -m "new release - version 1.0.22"
+        git push origin 1.0.22
    
 
