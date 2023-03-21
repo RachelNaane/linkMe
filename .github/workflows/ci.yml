@@ -15,8 +15,8 @@ jobs:
       with:
         fetch-depth: 0
     
-    - name: Build image
-      run: docker build . --file Dockerfile --tag app
+    #- name: Build image
+     # run: docker build . --file Dockerfile --tag app
       
     #- name: E2E test
      # run: |
@@ -31,8 +31,8 @@ jobs:
         tag_prefix: ""
         version_format: "${major}.${minor}.${patch}"
         
-    - name: Git Version
-      id: version
-      uses: codacy/git-version@2.7.1
+    - name: Publish 
+      run: |
+        echo ${{ steps.Git_Semantic_Version.outputs.version_tag }}
    
 
