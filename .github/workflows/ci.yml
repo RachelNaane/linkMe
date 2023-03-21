@@ -26,14 +26,15 @@ jobs:
         #./tests/e2e-test.sh localhost:80
     
     - name: Git Semantic Version
+      id: version
       uses: PaulHatch/semantic-version@v5.0.3
       with:
         tag_prefix: ""
         version_format: "${major}.${minor}.${patch}"
         
-    - name: Tag 
-      run: |
-        git tag -a 1.0.22 -m "new release - version 1.0.22"
-        git push origin 1.0.22
+    - uses: actions-ecosystem/action-push-tag@v1
+      with:
+        tag: ${{ steps.version.outputs.version_tag }}
+        message: new release - version ${{ steps.version.outputs.version_tag }}'
    
 
