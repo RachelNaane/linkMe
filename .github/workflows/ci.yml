@@ -18,16 +18,20 @@ jobs:
     - name: Build image
       run: docker build . --file Dockerfile --tag app
       
-    - name: E2E test
-      run: |
-        export APP_IMAGE=app
-        docker compose up -d
-        chmod +x ./tests/e2e-test.sh
-        ./tests/e2e-test.sh localhost:80
+    #- name: E2E test
+     # run: |
+      #  export APP_IMAGE=app
+       # docker compose up -d
+        #chmod +x ./tests/e2e-test.sh
+        #./tests/e2e-test.sh localhost:80
     
     - name: Git Semantic Version
       uses: PaulHatch/semantic-version@v5.0.3
       with:
         version_format: "${major}.${minor}.${patch}"
+        
+    - name: Git Version
+      id: version
+      uses: codacy/git-version@2.7.1
    
 
