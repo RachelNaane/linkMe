@@ -70,9 +70,9 @@ jobs:
     - name: Update image version in chart
       run: |
         cd linkMe-gitops/linkMe/
-        sed -i "s/tag: .*/tag: ${env.NEXT_VERSION}/" values.yaml
+        sed -i "s/tag: .*/tag: ${{ steps.version.outputs.version_tag }}/" values.yaml
         git add values.yaml
-        git commit -m "by terraform - updated image tag to ${env.NEXT_VERSION}"
+        git commit -m "by terraform - updated image tag to ${{ steps.version.outputs.version_tag }}"
         git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
