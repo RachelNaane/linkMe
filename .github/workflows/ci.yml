@@ -5,9 +5,7 @@ on:
     branches: [ "main" ]
 
 permissions:
- id-token: read | write
- contents: read | write
- 
+ id-token: write
  
 jobs:
   CI:
