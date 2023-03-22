@@ -6,7 +6,6 @@ on:
 
 permissions:
  id-token: write
- contents: read
  
 jobs:
   CI:
@@ -46,15 +45,4 @@ jobs:
         aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 752620938895.dkr.ecr.eu-west-3.amazonaws.com
         docker tag app:latest 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
         docker push 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
-        
-    - name: Tag commit
-      run: |
-        git config --global user.name "RachelNaane"
-        git config --global user.email "Ratash3@gmail.com"
-        git tag -a ${{ steps.version.outputs.version_tag }} -m "new release - version ${{ steps.version.outputs.version_tag }}"
-        git push origin ${{ steps.version.outputs.version_tag }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-        
-   
-
+      
