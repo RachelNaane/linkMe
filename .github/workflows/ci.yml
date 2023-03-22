@@ -32,19 +32,14 @@ jobs:
       with:
         tag_prefix: ""
         version_format: "${major}.${minor}.${patch}"
-        
-    - name: Set up Git
-      uses: oleksiyrudenko/gha-git-credentials@v2-latest
-      with:
-        name: RachelNaane
-        email: ratash3@gmail.com
-        token: '${{ secrets.TOKEN_GITHUB }}'
-        global: true
-        actor: RachelNaane
     
     - name: Tag commit
       run: |
+        git config --global user.name "RachelNaane"
+        git config --global user.email "Ratash3@gmail.com"
         git tag -a ${{ steps.version.outputs.version_tag }} -m "new release - version ${{ steps.version.outputs.version_tag }}"
         git push origin ${{ steps.version.outputs.version_tag }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
    
 
