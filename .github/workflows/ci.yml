@@ -82,9 +82,7 @@ jobs:
         sed -i "s/tag: .*/tag: ${{ steps.version.outputs.version_tag }}/" values.yaml
         git add values.yaml
         git commit -m "by terraform - updated image tag to ${{ steps.version.outputs.version_tag }}"
-        git push origin main
-      env:
-        GITLAB_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/RachelNaane/linkMe-gitops.git
     
     - name: Send mail
       if: always()
