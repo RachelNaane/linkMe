@@ -20,14 +20,15 @@ jobs:
     - name: Build Docker image
       run: docker build . --file Dockerfile --tag app
       
-    #- name: E2E test
-     # run: |
-      #  export APP_IMAGE=app
-       # docker compose up -d
-        #chmod +x ./tests/e2e-test.sh
-        #./tests/e2e-test.sh localhost:80
+    - name: E2E test
+      run: |
+        export APP_IMAGE=app
+        docker compose up -d
+        chmod +x ./tests/e2e-test.sh
+        ./tests/e2e-test.sh localhost:80
     
     - name: Git Semantic Version
+      if: startsWith(github.ref, 'refs/heads/main')
       id: version
       uses: PaulHatch/semantic-version@v5.0.3
       with:
@@ -35,12 +36,14 @@ jobs:
         version_format: "${major}.${minor}.${patch}"
     
     - name: Configure AWS Credentials
+      if: startsWith(github.ref, 'refs/heads/main')
       uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: arn:aws:iam::752620938895:role/linkme-github-actions-role
         aws-region: eu-west-3
     
     - name: Publish image to ECR
+      if: startsWith(github.ref, 'refs/heads/main')
       run: |
         aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 752620938895.dkr.ecr.eu-west-3.amazonaws.com
         docker tag app:latest 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
