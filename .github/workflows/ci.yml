@@ -3,11 +3,9 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-
+ 
 jobs:
-
   CI:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +31,18 @@ jobs:
         tag_prefix: ""
         version_format: "${major}.${minor}.${patch}"
     
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::752620938895:role/linkme-github-actions-role
+        aws-region: eu-west-3
+    
+    - name: Publish image to ECR
+      run: |
+        aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 752620938895.dkr.ecr.eu-west-3.amazonaws.com
+        docker tag app:latest 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
+        docker push 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
+        
     - name: Tag commit
       run: |
         git config --global user.name "RachelNaane"
