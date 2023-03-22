@@ -34,9 +34,10 @@ jobs:
         version_format: "${major}.${minor}.${patch}"
         
     - name: Set up Git
-      uses: actions/setup-git@v1
+      uses: oleksiyrudenko/gha-git-credentials@v2-latest
       with:
-        access-token: ${{ secrets.TOKEN_GITHUB }}
+        token: '${{ secrets.TOKEN_GITHUB }}'
+        global: true
     
     - name: Tag commit
       run: |
