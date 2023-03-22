@@ -60,15 +60,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Clone gitops repo
-      uses: GuillaumeFalourd/clone-github-repo-action@v2
+    - name: Setup SSH
+      uses: MrSquaare/ssh-setup-action@v2
       with:
-        owner: RachelNaane
-        repository: linkMe-gitops
-        access-token: ${{ secrets.GITHUB_TOKEN }}
+        host: github.com
+        private-key: ${{ secrets.GITOPS_TOKEN }}
     
-    - name: Update image version in chart
+    - name: Update image version gitops repo
       run: |
+        git clone git@github.com:RachelNaane/linkMe-gitops.git
         cd linkMe-gitops/linkMe/
         sed -i "s/tag: .*/tag: ${{ steps.version.outputs.version_tag }}/" values.yaml
         git add values.yaml
