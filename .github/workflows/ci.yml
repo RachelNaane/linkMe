@@ -18,8 +18,8 @@ jobs:
       with:
         fetch-depth: 0
     
-    #- name: Build Docker image
-     # run: docker build . --file Dockerfile --tag app
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag app
       
     #- name: E2E test
      # run: |
