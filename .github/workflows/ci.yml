@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
     
-    #- name: Build image
+    #- name: Build Docker image
      # run: docker build . --file Dockerfile --tag app
       
     #- name: E2E test
@@ -32,7 +33,13 @@ jobs:
         tag_prefix: ""
         version_format: "${major}.${minor}.${patch}"
         
-    - uses: actions-ecosystem/action-push-tag@v1
+    - name: Git Credentials
+      uses: oleksiyrudenko/gha-git-credentials@v2-latest
+      with:
+        token: '${{ secrets.GITHUB_TOKEN }}'
+        
+    - name: Tag commit
+      uses: actions-ecosystem/action-push-tag@v1
       with:
         tag: ${{ steps.version.outputs.version_tag }}
         message: new release - version ${{ steps.version.outputs.version_tag }}'
