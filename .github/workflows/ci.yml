@@ -75,7 +75,7 @@ jobs:
         git commit -m "by terraform - updated image tag to ${{ steps.version.outputs.version_tag }}"
         git push origin main
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITLAB_TOKEN: ${{ secrets.GITOPS_TOKEN }}
     
     - name: Send mail
       if: always()
