@@ -36,6 +36,8 @@ jobs:
     - name: Set up Git
       uses: oleksiyrudenko/gha-git-credentials@v2-latest
       with:
+        name: RachelNaane
+        email: ratash3@gmail.com
         token: '${{ secrets.TOKEN_GITHUB }}'
         global: true
     
