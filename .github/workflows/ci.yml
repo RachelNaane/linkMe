@@ -4,8 +4,10 @@ on:
   push:
     branches: [ "main" ]
 
-permissions:
- id-token: write
+#permissions:
+ #id-token: read | write
+ #content: read | write
+ 
  
 jobs:
   CI:
@@ -58,6 +60,15 @@ jobs:
         git push origin ${{ steps.version.outputs.version_tag }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Slack Notification
+      if: always()
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_TITLE: "CI Pipeline - Job Build status: ${{ job.status }}"
+        SLACK_FOOTER: "Powered by Stav's Portfolio CI  :rocket: "
         
     - name: Send mail
       if: always()
@@ -65,6 +76,6 @@ jobs:
       with:
         connection_url: ${{secrets.GMAIL_SMTP}}
         subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }} 
-        to: ${{github.event.pusher.email}}
+        to: ratash3@gmail.com #${{github.event.pusher.email}}
         from: Github
         body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
