@@ -40,6 +40,7 @@ jobs:
         email: ratash3@gmail.com
         token: '${{ secrets.TOKEN_GITHUB }}'
         global: true
+        actor: RachelNaane
     
     - name: Tag commit
       run: |
