@@ -60,12 +60,29 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
+    - name: Clone gitops repo
+      uses: GuillaumeFalourd/clone-github-repo-action@v2
+      with:
+        owner: RachelNaane
+        repository: linkMe-gitops
+        access-token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Update image version in chart
+      run: |
+        cd linkMe-gitops/linkMe/
+        sed -i "s/tag: .*/tag: ${env.NEXT_VERSION}/" values.yaml
+        git add values.yaml
+        git commit -m "by terraform - updated image tag to ${env.NEXT_VERSION}"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
     - name: Send mail
       if: always()
       uses: dawidd6/action-send-mail@v3
       with:
         connection_url: ${{secrets.GMAIL_SMTP}}
-        subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }} 
-        to: ratash3@gmail.com #${{github.event.pusher.email}}
+        subject: ${{ github.job }} job of ${{ github.repository }} finished with status - ${{ job.status }} 
+        to: ${{github.event.pusher.email}}
         from: Github
-        body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
+        body: ${{ github.job }} job in ${{ github.repository }} finished with status - ${{ job.status }}
