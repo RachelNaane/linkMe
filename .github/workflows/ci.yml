@@ -53,8 +53,8 @@ jobs:
    # - name: Tag commit
     #  if: startsWith(github.ref, 'refs/heads/main')
      # run: |
-      #  git config --global user.name ${{ secrets.GITHUB_USERNAME }}
-       # git config --global user.email ${{ secrets.GITHUB_USER_EMAIL }}
+      #  git config --global user.name ${{ secrets.USERNAME }}
+       # git config --global user.email ${{ secrets.USER_EMAIL }}
         #git tag -a ${{ steps.version.outputs.version_tag }} -m "new release - version ${{ steps.version.outputs.version_tag }}"
         #git push origin ${{ steps.version.outputs.version_tag }}
       #env:
@@ -76,12 +76,12 @@ jobs:
     - name: Update image version gitops repo
       run: |
         cd linkMe/
-        git config --global user.email ${{ secrets.GITHUB_USER_EMAIL }}
-        git config --global user.name ${{ secrets.GITHUB_USERNAME }}
+        git config --global user.email ${{ secrets.USER_EMAIL }}
+        git config --global user.name ${{ secrets.USERNAME }}
         sed -i "s/tag: .*/tag: ${{ steps.version.outputs.version_tag }}/" values.yaml
         git add values.yaml
         git commit -m "by terraform - updated image tag to ${{ steps.version.outputs.version_tag }}"
-      #  git push https://${{ secrets.GITHUB_TOKEN }}@github.com/RachelNaane/linkMe-gitops.git
+        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/RachelNaane/linkMe-gitops.git
      # env:
       #  GITOPS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
