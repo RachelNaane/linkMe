@@ -48,4 +48,23 @@ jobs:
         aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 752620938895.dkr.ecr.eu-west-3.amazonaws.com
         docker tag app:latest 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
         docker push 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
-      
+        
+    - name: Tag commit
+      if: startsWith(github.ref, 'refs/heads/main')
+      run: |
+        git config --global user.name "RachelNaane"
+        git config --global user.email "Ratash3@gmail.com"
+        git tag -a ${{ steps.version.outputs.version_tag }} -m "new release - version ${{ steps.version.outputs.version_tag }}"
+        git push origin ${{ steps.version.outputs.version_tag }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Send mail
+      if: always()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        connection_url: ${{secrets.GMAIL_SMTP}}
+        subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }} 
+        to: ${{github.event.pusher.email}}
+        from: Github
+        body: ${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}
