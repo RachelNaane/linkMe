@@ -77,7 +77,8 @@ jobs:
     - name: Update image version gitops repo
       run: |
         cd linkMe/
-        ls
+        git config --global user.email "ratash3@gmail.com"
+        git config --global user.name "RachelNaane"
         sed -i "s/tag: .*/tag: ${{ steps.version.outputs.version_tag }}/" values.yaml
         git add values.yaml
         git commit -m "by terraform - updated image tag to ${{ steps.version.outputs.version_tag }}"
