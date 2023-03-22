@@ -18,8 +18,8 @@ jobs:
       with:
         fetch-depth: 0
     
-    - name: Build Docker image
-      run: docker build . --file Dockerfile --tag app
+   # - name: Build Docker image
+    #  run: docker build . --file Dockerfile --tag app
       
     #- name: E2E test
      # run: |
@@ -28,7 +28,7 @@ jobs:
         #chmod +x ./tests/e2e-test.sh
         #./tests/e2e-test.sh localhost:80
     
-    - name: Git Semantic Version
+    - name: Version
       if: startsWith(github.ref, 'refs/heads/main')
       id: version
       uses: PaulHatch/semantic-version@v5.0.3
@@ -36,29 +36,29 @@ jobs:
         tag_prefix: ""
         version_format: "${major}.${minor}.${patch}"
     
-    - name: Configure AWS Credentials
-      if: startsWith(github.ref, 'refs/heads/main')
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        role-to-assume: arn:aws:iam::752620938895:role/linkme-github-actions-role
-        aws-region: eu-west-3
+    #- name: Configure AWS Credentials
+     # if: startsWith(github.ref, 'refs/heads/main')
+      #uses: aws-actions/configure-aws-credentials@v2
+      #with:
+       # role-to-assume: arn:aws:iam::752620938895:role/linkme-github-actions-role
+        #aws-region: eu-west-3
     
-    - name: Publish image to ECR
-      if: startsWith(github.ref, 'refs/heads/main')
-      run: |
-        aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 752620938895.dkr.ecr.eu-west-3.amazonaws.com
-        docker tag app:latest 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
-        docker push 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
+    #- name: Publish image to ECR
+     # if: startsWith(github.ref, 'refs/heads/main')
+      #run: |
+       # aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 752620938895.dkr.ecr.eu-west-3.amazonaws.com
+        #docker tag app:latest 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
+        #docker push 752620938895.dkr.ecr.eu-west-3.amazonaws.com/linkme:${{ steps.version.outputs.version_tag }}
         
-    - name: Tag commit
-      if: startsWith(github.ref, 'refs/heads/main')
-      run: |
-        git config --global user.name "RachelNaane"
-        git config --global user.email "Ratash3@gmail.com"
-        git tag -a ${{ steps.version.outputs.version_tag }} -m "new release - version ${{ steps.version.outputs.version_tag }}"
-        git push origin ${{ steps.version.outputs.version_tag }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   # - name: Tag commit
+    #  if: startsWith(github.ref, 'refs/heads/main')
+     # run: |
+      #  git config --global user.name "RachelNaane"
+       # git config --global user.email "Ratash3@gmail.com"
+        #git tag -a ${{ steps.version.outputs.version_tag }} -m "new release - version ${{ steps.version.outputs.version_tag }}"
+        #git push origin ${{ steps.version.outputs.version_tag }}
+      #env:
+       # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
    # - name: Clone gitops repo
     #  uses: GuillaumeFalourd/clone-github-repo-action@v2
@@ -66,7 +66,9 @@ jobs:
       #  owner: RachelNaane
        # repository: linkMe-gitops
         #access-token: ${{ secrets.GITHUB_TOKEN }}
-    - name: actions/checkout@v3
+        
+    - name: Clone gitops repo
+      uses: actions/checkout@v3
       with:
         repository: RachelNaane/linkMe-gitops
         ref: 'main'
