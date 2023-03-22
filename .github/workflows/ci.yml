@@ -60,11 +60,17 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Setup SSH
-      uses: MrSquaare/ssh-setup-action@v2
+   # - name: Clone gitops repo
+    #  uses: GuillaumeFalourd/clone-github-repo-action@v2
+     # with:
+      #  owner: RachelNaane
+       # repository: linkMe-gitops
+        #access-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: actions/checkout@v3
       with:
-        host: github.com
-        private-key: ${{ secrets.GITOPS_TOKEN }}
+        repository: RachelNaane/linkMe-gitops
+        ref: 'main'
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Update image version gitops repo
       run: |
